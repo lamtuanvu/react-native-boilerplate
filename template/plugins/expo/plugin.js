@@ -73,6 +73,7 @@ module.exports = {
 				execSync('rm assets', { stdio: 'pipe' });
 				execSync('rm App.js', { stdio: 'pipe' });
 				execSync('rm react-native.config.js', { stdio: 'pipe' });
+				execSync('rm app.config.ts', { stdio: 'pipe' });
 			}
 
 			resolve();

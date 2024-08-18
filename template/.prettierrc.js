@@ -24,5 +24,13 @@ module.exports = {
   ],
   importOrderTypeScriptVersion: '5.0.0',
   plugins: ['@ianvs/prettier-plugin-sort-imports'],
+  printWidth: 80,
+  endOfLine: "lf",
+  tabWidth: 2,
+  indentStyle: "space",
+  useTabs: true,
+  arrowParens: "avoid",
+  bracketSameLine: false,
   singleQuote: true,
+  trailingComma: "all",
 };

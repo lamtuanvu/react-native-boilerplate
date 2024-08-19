@@ -9,6 +9,7 @@ import type {
 } from '@/types/theme/borders';
 import type { UnionConfiguration } from '@/types/theme/config';
 import type { ViewStyle } from 'react-native';
+import { SizeFuncResult } from './hooks/useSize';
 
 /**
  * Generates border color styles from configuration
@@ -30,19 +31,21 @@ export const generateBorderColors = (configuration: UnionConfiguration) => {
 /**
  * Generates border radius styles from configuration
  */
-export const generateBorderRadius = () => {
+export const generateBorderRadius = (
+	size: (target: number) => SizeFuncResult,
+) => {
 	return config.borders.radius.reduce((acc, radius) => {
 		return Object.assign(acc, {
-			[`rounded_${radius}`]: {
-				borderRadius: radius,
+			[`rounded_${size(radius).height}`]: {
+				borderRadius: size(radius).height,
 			},
-			[`roundedTop_${radius}`]: {
-				borderTopLeftRadius: radius,
-				borderTopRightRadius: radius,
+			[`roundedTop_${size(radius).height}`]: {
+				borderTopLeftRadius: size(radius).height,
+				borderTopRightRadius: size(radius).height,
 			},
-			[`roundedBottom_${radius}`]: {
-				borderBottomLeftRadius: radius,
-				borderBottomRightRadiusRadius: radius,
+			[`roundedBottom_${size(radius).height}`]: {
+				borderBottomLeftRadius: size(radius).height,
+				borderBottomRightRadiusRadius: size(radius).height,
 			},
 		});
 	}, {} as BorderRadius & BorderTopRadius & BorderBottomRadius);
@@ -51,23 +54,25 @@ export const generateBorderRadius = () => {
 /**
  * Generates border width styles from configuration
  */
-export const generateBorderWidths = () => {
+export const generateBorderWidths = (
+	size: (target: number) => SizeFuncResult,
+) => {
 	return config.borders.widths.reduce((acc, width) => {
 		return Object.assign(acc, {
-			[`w_${width}`]: {
+			[`w_${size(width).width}`]: {
 				borderWidth: width,
 			},
-			[`wTop_${width}`]: {
+			[`wTop_${size(width).width}`]: {
 				borderTopWidth: width,
 			},
-			[`wBottom_${width}`]: {
+			[`wBottom_${size(width).width}`]: {
 				borderBottomWidth: width,
 			},
-			[`wLeft_${width}`]: {
+			[`wLeft_${size(width).width}`]: {
 				borderLeftWidth: width,
 			},
-			[`wRight_${width}`]: {
-				borderRightWidth: width,
+			[`wRight_${size(width).width}`]: {
+				borderRightWidth: size(width).width,
 			},
 		});
 	}, {} as BorderWidths);

@@ -16,11 +16,11 @@ export const generateFontColors = (configuration: UnionConfiguration) => {
 	);
 };
 
-export const generateFontSizes = () => {
+export const generateFontSizes = (fontSize: (target: number) => number) => {
 	return config.fonts.sizes.reduce((acc, size) => {
 		return Object.assign(acc, {
 			[`size_${size}`]: {
-				fontSize: size,
+				fontSize: fontSize(size),
 			},
 		});
 	}, {} as FontSizes);

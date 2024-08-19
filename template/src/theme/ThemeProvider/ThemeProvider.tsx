@@ -29,6 +29,7 @@ import type {
 	FulfilledThemeConfiguration,
 	Variant,
 } from '@/types/theme/config';
+import { useSize } from '../hooks/useSize';
 
 // Types
 
@@ -47,6 +48,8 @@ function ThemeProvider({ children = false, storage }: Props) {
 	const [variant, setVariant] = useState(
 		(storage.getString('theme') as Variant) || 'default',
 	);
+
+	const { size, width, height, fontSize } = useSize()
 
 	// Initialize theme at default if not defined
 	useEffect(() => {
@@ -69,7 +72,7 @@ function ThemeProvider({ children = false, storage }: Props) {
 
 	const fonts = useMemo(() => {
 		return {
-			...generateFontSizes(),
+			...generateFontSizes(fontSize),
 			...generateFontColors(fullConfig),
 			...staticFontStyles,
 		};
@@ -82,8 +85,8 @@ function ThemeProvider({ children = false, storage }: Props) {
 	const borders = useMemo(() => {
 		return {
 			...generateBorderColors(fullConfig),
-			...generateBorderRadius(),
-			...generateBorderWidths(),
+			...generateBorderRadius(size),
+			...generateBorderWidths(size),
 		};
 	}, [fullConfig]);
 
@@ -103,6 +106,9 @@ function ThemeProvider({ children = false, storage }: Props) {
 			fonts,
 			backgrounds,
 			borders,
+			size,
+			width,
+			height
 		} satisfies ComponentTheme;
 	}, [variant, layout, fonts, backgrounds, borders, fullConfig.colors]);
 

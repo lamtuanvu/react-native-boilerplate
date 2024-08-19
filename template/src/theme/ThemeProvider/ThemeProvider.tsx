@@ -34,9 +34,18 @@ import { generateGutters, staticGutterStyles } from '@/theme/gutters';
 import layout from '@/theme/layout';
 import generateConfig from '@/theme/ThemeProvider/generateConfig';
 
-type Context = {
+import type { MMKV } from 'react-native-mmkv';
+import type { ComponentTheme, Theme } from '@/types/theme/theme';
+import type {
+	FulfilledThemeConfiguration,
+	Variant,
+} from '@/types/theme/config';
+import { useSize } from '../hooks/useSize';
+
+// Types
+type Context = Theme & {
   changeTheme: (variant: Variant) => void;
-} & Theme;
+};
 
 export const ThemeContext = createContext<Context | undefined>(undefined);
 
@@ -59,6 +68,8 @@ function ThemeProvider({ children = false, storage }: Props) {
     }
   }, [storage]);
 
+	const { size, width, height, fontSize } = useSize()
+
   const changeTheme = useCallback(
     (nextVariant: Variant) => {
       setVariant(nextVariant);
@@ -72,13 +83,13 @@ function ThemeProvider({ children = false, storage }: Props) {
     return generateConfig(variant) satisfies FulfilledThemeConfiguration;
   }, [variant]);
 
-  const fonts = useMemo(() => {
-    return {
-      ...generateFontSizes(),
-      ...generateFontColors(fullConfig),
-      ...staticFontStyles,
-    };
-  }, [fullConfig]);
+	const fonts = useMemo(() => {
+		return {
+			...generateFontSizes(fontSize),
+			...generateFontColors(fullConfig),
+			...staticFontStyles,
+		};
+	}, [fullConfig]);
 
   const backgrounds = useMemo(() => {
     return {
@@ -93,15 +104,14 @@ function ThemeProvider({ children = false, storage }: Props) {
       ...staticGutterStyles,
     };
   }, [fullConfig]);
-
-  const borders = useMemo(() => {
-    return {
-      ...generateBorderColors(fullConfig),
-      ...generateBorderRadius(),
-      ...generateBorderWidths(),
+	const borders = useMemo(() => {
+		return {
+			...generateBorderColors(fullConfig),
+			...generateBorderRadius(size),
+			...generateBorderWidths(size),
       ...staticBorderStyles,
-    };
-  }, [fullConfig]);
+		};
+	}, [fullConfig]);
 
   const navigationTheme = useMemo(() => {
     return {
@@ -110,17 +120,20 @@ function ThemeProvider({ children = false, storage }: Props) {
     };
   }, [variant, fullConfig.navigationColors]);
 
-  const theme = useMemo(() => {
-    return {
-      backgrounds,
-      borders,
-      colors: fullConfig.colors,
-      fonts,
-      gutters,
-      layout,
-      variant,
-    } satisfies ComponentTheme;
-  }, [variant, fonts, backgrounds, borders, fullConfig.colors, gutters]);
+	const theme = useMemo(() => {
+		return {
+			backgrounds,
+			borders,
+			colors: fullConfig.colors,
+			fonts,
+			gutters,
+			layout,
+			variant,
+			size,
+			width,
+			height
+		} satisfies ComponentTheme;
+	}, [variant, layout, fonts, backgrounds, borders, fullConfig.colors]);
 
   const components = useMemo(() => {
     return componentsGenerator(theme);

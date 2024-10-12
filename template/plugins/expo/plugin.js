@@ -58,6 +58,7 @@ module.exports = {
 					execSync('rm index.js', { stdio: 'pipe' });
 					// remove android and ios folders
 					execSync('rm -rf android ios', { stdio: 'pipe' });
+					execSync('mv metro.expo.config.js metro.config.js', { stdio: 'pipe' });
 
 					console.log('📦 Installing expo dependencies...')
 					execSync(`${packageManager} install`, { stdio: 'pipe' });

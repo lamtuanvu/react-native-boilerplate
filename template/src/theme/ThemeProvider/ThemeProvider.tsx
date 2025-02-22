@@ -34,12 +34,6 @@ import { generateGutters, staticGutterStyles } from '@/theme/gutters';
 import layout from '@/theme/layout';
 import generateConfig from '@/theme/ThemeProvider/generateConfig';
 
-import type { MMKV } from 'react-native-mmkv';
-import type { ComponentTheme, Theme } from '@/types/theme/theme';
-import type {
-	FulfilledThemeConfiguration,
-	Variant,
-} from '@/types/theme/config';
 import { useSize } from '../hooks/useSize';
 
 // Types
